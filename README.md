@@ -1,8 +1,8 @@
 
-# <img src="images/hexagonal_arch_logo.png" alt="Hex Arch Logo" width="50"/>   
+<img src="images/hexagonal_arch_logo.png" alt="Hex Arch Logo" width="50"/>   
 
 
-# Getting Started
+## Getting Started
 
 
 #### Onboarding
