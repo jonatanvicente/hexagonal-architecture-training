@@ -7,7 +7,7 @@
 
 #### Onboarding
 
-* This tutorial is available online at https://jonatan-vicente.gitbook.io/docker-and-k8s-training/
+* This tutorial is available online at https://jonatan-vicente.gitbook.io/hexagonal-architecture-training/
 * Please, be sure of follow all [Installation Instructions](installations.md) you need (are easy). 
 
 #### Prerrequisites
