@@ -1,9 +1,11 @@
 $schema: https://api.gitbook.com/gitbook-docs.yaml
 site:
+  title: Hexagonal Architecture Training
   structure:
     - type: space
       key: hexagonal-architecture-training
       title: Hexagonal Architecture Training
       path: hexagonal-architecture-training
+      default: true
       content:
         directory: ./
