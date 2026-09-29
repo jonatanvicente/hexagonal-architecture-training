@@ -23,7 +23,7 @@ layout:
 
 # Hexagonal Architecture Training
 
-<img src="./images/hexagonal_arch_logo.png" alt="" width="600">
+<img src="images/hexagonal_arch_logo.png" alt="" width="600">
 
 ### Getting Started
 
