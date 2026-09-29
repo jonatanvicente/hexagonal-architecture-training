@@ -1,28 +1,45 @@
 ---
 layout:
+  width: default
   title:
     visible: false
+  description:
+    visible: true
+  tableOfContents:
+    visible: true
+  outline:
+    visible: true
+  pagination:
+    visible: true
+  metadata:
+    visible: true
+  tags:
+    visible: true
+  actions:
+    visible: true
+  anchors:
+    visible: true
 ---
 
-<img src="images/hexagonal_arch_logo.png" width="600"/>   
+# Hexagonal Architecture Training
 
+<img src=".gitbook/assets/hexagonal_arch_logo (1).png" alt="" width="600">
 
-## Getting Started
+### Getting Started
 
-
-#### Onboarding
+**Onboarding**
 
 * This tutorial is available online at https://jonatan-vicente.gitbook.io/hexagonal-architecture-training/
-* Please, be sure of follow all [Installation Instructions](installations.md) you need (are easy). 
+* Please, be sure of follow all [Installation Instructions](installations.md) you need (are easy).
 
-#### Prerrequisites
+**Prerrequisites**
 
 It assumes you have knowledge about:
-- Basic knowledge of networking and software architecture
-- Operating Systems (Linux based preferably) and working with the command line
 
+* Basic knowledge of networking and software architecture
+* Operating Systems (Linux based preferably) and working with the command line
 
-#### Repository Structure
+**Repository Structure**
 
 ```
 hexagonal-architecture-training/                   
@@ -41,32 +58,30 @@ hexagonal-architecture-training/
 └── README.md                 
 ```
 
-
-#### Sequence of the course
+**Sequence of the course**
 
 1. Follow the slides in the course
 2. Use the references in the Reference Guide if needed
 3. Complete the lab for each section
-4. Test your knowledge with the quiz for each section 
+4. Test your knowledge with the quiz for each section
 
-
-#### 📄 License
+**📄 License**
 
 * Este contenido está disponible públicamente para su consulta y aprendizaje, pero **no puede ser reutilizado, modificado ni distribuido con fines comerciales** sin autorización expresa del autor.
 * **License**: [Attribution-NonCommercial-NoDerivatives 4.0 International (CC BY-NC-ND 4.0)](https://creativecommons.org/licenses/by-nc-nd/4.0/deed.en)
 
 Esto significa que:
-- ✅ Puedes ver, descargar y compartir el material con atribución al autor.
-- ❌ No puedes modificarlo, adaptarlo ni crear obras derivadas.
-- ❌ No puedes utilizarlo con fines comerciales (como cursos, bootcamps, o formación interna).
 
+* ✅ Puedes ver, descargar y compartir el material con atribución al autor.
+* ❌ No puedes modificarlo, adaptarlo ni crear obras derivadas.
+* ❌ No puedes utilizarlo con fines comerciales (como cursos, bootcamps, o formación interna).
 
-#### Trainer
+**Trainer**
 
 **Jonatan Vicente- IT & Software Architect** (profile at [LinkedIn](https://www.linkedin.com/in/jonatanvicente/) )
 
 it@jonatanvicente.com
 
-<hr/>
+***
 
-&copy;**Jonatan Vicente - All Rights Reserved**. 
+©**Jonatan Vicente - All Rights Reserved**.
