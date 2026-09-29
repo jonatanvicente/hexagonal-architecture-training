@@ -1,4 +1,4 @@
-# 🧪 Module 1 Lab: 
+# 🧪 Module 1 Lab: Fundamentals
 
 ### 🧩 Exercise 1: 
 
