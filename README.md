@@ -1,5 +1,5 @@
 
-<img src="images/hexagonal_arch_logo.png" alt="Hex Arch Logo" width="200"/>   
+<img src="images/hexagonal_arch_logo.png" alt="Hex Arch Logo" width="400"/>   
 
 
 ## Getting Started
