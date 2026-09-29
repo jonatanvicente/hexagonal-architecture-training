@@ -4,7 +4,7 @@ layout:
     visible: false
 ---
 
-<img src="images/hexagonal_arch_logo.png" alt="Hex Arch Logo" width="500"/>   
+<img src="images/hexagonal_arch_logo.png" width="500"/>   
 
 
 ## Getting Started
