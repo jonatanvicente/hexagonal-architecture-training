@@ -1,4 +1,4 @@
-# Lab 1
+# 🧪 Module 1 Lab: Fundamentals
 
 > 📦 **STARTER CODE REQUIRED: `library-legacy`.** A tiny "Library Loans" app with 4 to 5 classes, runnable locally with one command, using in-memory storage (a list or map, no real database). 
 
