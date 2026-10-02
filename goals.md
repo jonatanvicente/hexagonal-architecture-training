@@ -23,6 +23,8 @@
   - Entities
   - Value Objects
   - Domain Services
+  - Application Services vs. Domain Services
+  - Package & directory structuring patterns
 - **Defining ports**
   - Interfaces as contracts of the application core
   - Defining the application boundary
@@ -45,6 +47,8 @@
   - Persistence adapters
   - External service clients
   - Message brokers
+  - Boundary Translation
+  - Exception Translation
 - **Dependency management**
   - Dependency Injection
   - Loose coupling between components
@@ -83,6 +87,7 @@
   - Framework independence
   - Unit of Work pattern
   - Atomicity of operations
+  - Dual-writes and the Transactional Outbox Pattern
 
 ---
 
@@ -91,7 +96,10 @@
 🧪 **Goal:** Migrate a monolithic system to Hexagonal Architecture and measure the resulting improvements in coupling and maintainability.
 
 - **Architectural migration**
+  - MVC to Hexagonal
   - Monolith migration strategies
+  - Code-level legacy refactoring
+  - Strangler Fig Pattern
 - **Hexagonal Architecture in modern systems**
   - Microservices
   - Event-Driven Architectures (EDA)
