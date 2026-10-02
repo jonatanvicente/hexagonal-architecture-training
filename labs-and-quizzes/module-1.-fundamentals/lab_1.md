@@ -2,14 +2,6 @@
 
 > 📦 **STARTER CODE REQUIRED: `library-legacy`.** A tiny "Library Loans" app with 4 to 5 classes, runnable locally with one command, using in-memory storage (a list or map, no real database).
 
-{% file src="../../.gitbook/assets/library-legacy.zip" %}
-Starter code. Run `npm install` and then `npm start`.
-{% endfile %}
-
-{% file src="../../src/lib/lab_1/library-legacy.zip" %}
-Starter code. Run `npm install` and then `npm start`.
-{% endfile %}
-
 ***
 
 ### 🧩 Exercise 1: Spot the Problems
