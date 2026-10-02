@@ -1,2 +1,3 @@
 # Installations
 
+- Node 20+
