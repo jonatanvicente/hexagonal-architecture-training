@@ -20,4 +20,5 @@
     * [Lab 5](labs-and-quizzes/module-5.-real-world-use-cases-and-advanced-patterns/lab_5.md)
     * [Quiz 5](labs-and-quizzes/module-5.-real-world-use-cases-and-advanced-patterns/quiz_5.md)
   * [Final Project. From Monolith to Hexagon](labs-and-quizzes/final-project.-from-monolith-to-hexagon/README.md)
-    * [Final Project Lab](labs-and-quizzes/final-project.-from-monolith-to-hexagon/final_project.md)
+    * [Lab Final](labs-and-quizzes/final-project.-from-monolith-to-hexagon/lab_final.md)
+    * [Final Project Quiz](labs-and-quizzes/final-project.-from-monolith-to-hexagon/final_project.md)
