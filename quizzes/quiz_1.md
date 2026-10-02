@@ -5,14 +5,14 @@
 ---
 
 **1. When converting a traditional MVC REST controller into a Driving (Primary) Adapter, which responsibility should be removed from the controller class?**
-a) Parsing incoming HTTP JSON request bodies into DTOs.
-b) Executing database queries and managing database transaction commits directly.
-c) Invoking a Driving Port (Use Case) interface.
-d) Returning HTTP response status codes such as 200 OK or 400 Bad Request.
+a) Parsing incoming HTTP JSON request bodies into DTOs.  
+b) Executing database queries and managing database transaction commits directly.  
+c) Invoking a Driving Port (Use Case) interface.  
+d) Returning HTTP response status codes such as 200 OK or 400 Bad Request.  
 
 <details>
   <summary>Solution</summary>
-- <b>b</b>. Why b is correct: In a traditional MVC "fat controller" or coupled controller, database access and transaction boundaries were frequently mixed into HTTP handling. In Hexagonal Architecture, the Driving Adapter's sole responsibility is protocol translation (HTTP/REST to domain commands). Database interactions and transactions belong strictly in Outbound Adapters and Application Services. Why others are incorrect: a, c, and d are all proper responsibilities of a Driving Adapter: parsing HTTP payloads, calling the application's use case port, and mapping domain responses back to HTTP status codes.
+- b. Why b is correct: In a traditional MVC "fat controller" or coupled controller, database access and transaction boundaries were frequently mixed into HTTP handling. In Hexagonal Architecture, the Driving Adapter's sole responsibility is protocol translation (HTTP/REST to domain commands). Database interactions and transactions belong strictly in Outbound Adapters and Application Services. Why others are incorrect: a, c, and d are all proper responsibilities of a Driving Adapter: parsing HTTP payloads, calling the application's use case port, and mapping domain responses back to HTTP status codes.
 </details>
 
 ---
