@@ -1,7 +1,6 @@
 # 🧠 Module 1 Quiz: Foundations & Architecture Critique
 
 **1. When converting a traditional MVC REST controller into a Driving (Primary) Adapter, which responsibility should be removed from the controller class?**
-
 a) Parsing incoming HTTP JSON request bodies into DTOs.
 b) Executing database queries and managing database transaction commits directly.
 c) Invoking a Driving Port (Use Case) interface.
