@@ -6,6 +6,10 @@
 Starter code. Run `npm install` and then `npm start`.
 {% endfile %}
 
+{% file src="../../src/lib/lab_1/library-legacy.zip" %}
+Starter code. Run `npm install` and then `npm start`.
+{% endfile %}
+
 ***
 
 ### 🧩 Exercise 1: Spot the Problems
