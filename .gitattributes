@@ -1,0 +1,3 @@
+*teacher_notes.md filter=git-crypt diff=git-crypt
+.gitattributes !filter !diff
+

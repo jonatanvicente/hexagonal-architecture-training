@@ -23,10 +23,6 @@ Recognize coupling in a classic layered (n-tier) design.
 - A simple diagram showing `Controller → Service → MySqlLoanRepository / SmtpEmailSender`.
 - The students notice that the business logic depends on technical details, and that changing email to SMS means editing `LoanService`.
 
-**❓ Discussion (teacher answers):**
-- *"But it's organized in layers, isn't that good?"* → Layers separate the code, but every dependency points toward the technology. The business logic is "on top of" the database, so it can't change or be tested without it.
-- *"Why change `LoanService` to send SMS? It's not a business change."* → Exactly. That is the problem Hexagonal Architecture solves.
-
 ---
 
 ### 🧩 Exercise 2: Separate Concerns and Invert One Dependency
@@ -49,10 +45,6 @@ Apply Separation of Concerns and the Dependency Inversion Principle (DIP) to the
 - All objects are created in one place, `main`.
 - The app works the same as before.
 
-**❓ Discussion (teacher answers):**
-- *"Why put the interface next to `LoanService` and not next to `SmtpEmailSender`?"* → Because the business **owns** the contract. That ownership is what "inversion" means: now the technology depends on the business.
-- *"Why `MemberNotifier` and not `EmailService`?"* → The name should describe *what* the business needs, not *how* it is done.
-
 ---
 
 ### 🧩 Exercise 3: Your First Hexagon
@@ -73,11 +65,6 @@ Identify ports and adapters, and prove that new adapters don't change the core.
 - The SMS notifier works, and the core files are unchanged.
 - `grep` finds no imports of adapters inside `core`.
 - The students can draw the hexagon: the core in the center, ports on the border, adapters outside.
-
-**❓ Discussion (teacher answers):**
-- *"Is this already Hexagonal Architecture?"* → Yes, in its simplest form. Modules 2 and 3 add the details: driving vs. driven ports, the domain model, and more adapters.
-- *"What would happen if someone imports an adapter inside `core` in the future?"* → The design would slowly decay; this is called architecture erosion. Today the `grep` check detects it, and later we'll automate checks like this.
-- *"Why is it a hexagon?"* → The shape doesn't matter. Cockburn chose it to break the top-to-bottom "layers" mindset.
 
 ---
 
