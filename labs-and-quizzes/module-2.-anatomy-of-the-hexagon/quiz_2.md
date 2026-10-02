@@ -13,9 +13,9 @@ d) In the CI/CD pipeline configuration files and deployment scripts.
 
 <details>
   <summary>Solution</summary>
-- b (Directly in the Application Core)
-Why b is correct: Ubiquitous Language is the single shared language between business experts and developers. In Hexagonal Architecture, the Application Core (Domain) serves as its sanctuary, ensuring that code directly mirrors business domain terminology without technical jargon.  
-Why others are incorrect: Options a, c, and d represent infrastructure, delivery, or operational concerns where technical jargon (SQL, HTTP, Docker) naturally predominates.  
+- b (Directly in the Application Core)  
+- Why b is correct: Ubiquitous Language is the single shared language between business experts and developers. In Hexagonal Architecture, the Application Core (Domain) serves as its sanctuary, ensuring that code directly mirrors business domain terminology without technical jargon.  
+- Why others are incorrect: Options a, c, and d represent infrastructure, delivery, or operational concerns where technical jargon (SQL, HTTP, Docker) naturally predominates.  
 </details>
 
 ---
