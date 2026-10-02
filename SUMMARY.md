@@ -3,6 +3,7 @@
 * [Hexagonal Architecture Training](README.md)
 * [Goals](goals.md)
 * [Installations](installations.md)
+<!--
 * [Reference Guide](reference-guide/README.md)
   * [Module 1. Fundamentals](reference-guide/module_1.md)
   * [Module 2. Anatomy of the Hexagon](reference-guide/module_2.md)
@@ -10,6 +11,7 @@
   * [Module 4. Testing Strategies in Decoupled Architectures](reference-guide/module_4.md)
   * [Module 5. Real-World Use Cases and Advanced Patterns](reference-guide/module_5.md)
   * [Final Project. From Monolith to Hexagon](reference-guide/final_project.md)
+  -->
 * [Labs and Quizzes](labs-and-quizzes/README.md)
   * [Module 1. Fundamentals](labs-and-quizzes/module-1.-fundamentals/README.md)
     * [Lab 1](labs-and-quizzes/module-1.-fundamentals/lab_1.md)
