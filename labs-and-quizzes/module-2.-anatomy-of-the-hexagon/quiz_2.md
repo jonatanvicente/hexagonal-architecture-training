@@ -1,231 +1,245 @@
 # 🧠 Module 2 Quiz: The Domain Core & Ubiquitous Language
 
-**Goal:** Evaluate core concepts of Domain-Driven Design inside the Hexagon, including Ubiquitous Language, Entities, Value Objects, Domain Services vs. Application Services, and invariant enforcement without framework pollution.
+🧪 **Goal:** Assess understanding of DDD building blocks inside the hexagon and how to keep the core free of technical concerns.
 
 ---
 
-**1. Where does the Ubiquitous Language strictly live and manifest within a Hexagonal application codebase?**
+**1.** Where must the Ubiquitous Language be most faithfully reflected in the codebase?
 
-a) Exclusively inside database schema migration files and SQL scripts.  
-b) Directly in the Application Core (class names, methods, variables, and domain exceptions).  
-c) Inside REST Controller endpoints and HTTP payload DTOs.  
-d) In the CI/CD pipeline configuration files and deployment scripts.  
+a) In REST API paths and DTO field names, since they are the public contract  
+b) In database table and column names, since data outlives code  
+c) In the adapters, since they are the boundary with the outside world  
+d) In the application core: class, method, variable and exception names  
 
 <details>
   <summary>Solution</summary>
-- b (Directly in the Application Core)  
-- Why b is correct: Ubiquitous Language is the single shared language between business experts and developers. In Hexagonal Architecture, the Application Core (Domain) serves as its sanctuary, ensuring that code directly mirrors business domain terminology without technical jargon.  
-- Why others are incorrect: Options a, c, and d represent infrastructure, delivery, or operational concerns where technical jargon (SQL, HTTP, Docker) naturally predominates.  
+
+- d
+- The core is where business concepts are modeled, so it must mirror the experts' language. Adapters and schemas may use technical or external naming and translate it.
 </details>
 
 ---
 
-**2. What is the defining characteristic that distinguishes a Domain Entity from a Value Object?**
+**2.** What distinguishes an Entity from a Value Object?
 
-a) Entities are completely immutable, while Value Objects are mutable.  
-b) Entities possess a thread of continuity and unique identity that persists over time; Value Objects are defined purely by their attributes and are immutable.  
-c) Entities reside in the adapter layer, while Value Objects reside in the application core.  
-d) Entities contain ORM annotations, while Value Objects contain JSON serialization annotations.  
+a) Entities are immutable; Value Objects can change their state  
+b) Entities have an identity that persists over time; Value Objects are defined by their attributes  
+c) Entities contain behavior; Value Objects are plain data holders without methods  
+d) Entities are persisted; Value Objects only exist in memory  
 
 <details>
   <summary>Solution</summary>
-- b (Entities possess a thread of continuity and unique identity that persists over time; Value Objects are defined purely by their attributes and are immutable)
-Why b is correct: An Entity has a distinct identity (e.g., UserId, OrderId) that remains constant even if its attributes change over time. A Value Object (e.g., Money, Address) has no identity and is identified strictly by the equality of its values; it is completely immutable.
-Why others are incorrect: Option a inverts immutability (Value Objects are immutable, Entities can change state). Option c is wrong because both live in the Core. Option d introduces framework annotations that shouldn't exist on domain objects.  
+
+- b
+- Identity is the key difference. Value Objects can have rich behavior (e.g., `Money.add()`) and are persisted too, usually embedded in an entity.
 </details>
 
 ---
 
-**3. How should a Value Object like `Money` handle an operation such as adding an amount (`money.add(otherMoney)`)?**
+**3.** How should a `Money` Value Object implement `money.add(otherMoney)`?
 
-a) Mutate its internal state variables directly using public setter methods.  
-b) Return a brand-new instance of `Money` containing the resulting sum, leaving the original instance unchanged.  
-c) Persist the updated amount directly to the database using an active record pattern.  
-d) Throw a `UnsupportedOperationException` because arithmetic operations belong in controllers.  
+a) Return a new `Money` instance with the sum, leaving the original unchanged  
+b) Update its internal amount and return `this` for method chaining  
+c) Delegate the sum to a `MoneyService` to keep `Money` a pure data holder  
+d) Return a primitive `BigDecimal` to avoid creating extra objects  
 
 <details>
   <summary>Solution</summary>
-- b (Return a brand-new instance of Money containing the resulting sum, leaving the original instance unchanged)
-Why b is correct: Value Objects are immutable. Any operation that modifies a Value Object must return a new Value Object instance containing the new state, preventing unintended side effects across the system.
-Why others are incorrect: Option a violates immutability. Option c pollutes the Value Object with database access. Option d incorrectly delegates domain math rules away from domain models.
+
+- a
+- Value Objects are immutable, so operations return new instances. Option c leads to an anemic model, and option d loses domain meaning (primitive obsession).
 </details>
 
 ---
 
-**4. When should domain logic be placed inside a Domain Service rather than inside a Domain Entity?**
+**4.** When should logic be placed in a Domain Service rather than in an Entity?
 
-a) When managing database connection pools and committing SQL transactions.  
-b) When encapsulating business logic or rules that naturally involve multiple entities or aggregates and don't belong to a single entity.  
-c) When converting JSON request strings into application DTOs.  
-d) When sending HTTP notification requests to external third-party webhooks.  
+a) When the logic needs to load data from a repository  
+b) When the logic is complex and makes the entity class too long  
+c) When a business rule involves several entities and doesn't naturally belong to one  
+d) When the logic must run inside a database transaction  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: A Domain Service handles domain logic that spans multiple entities (e.g., transferring funds between two `Account` entities) or doesn't naturally belong to a single entity, preserving entity encapsulation without forcing awkward responsibilities. Why others are incorrect: Option a is an infrastructure/orchestration task. Options c and d are adapter responsibilities (web/HTTP translation).
+
+- c
+- Example: transferring funds between two `Account`s. Loading data and transactions (a, d) are Application Service concerns. Long entities (b) should be refactored into Value Objects.
 </details>
 
 ---
 
-**5. What is the primary role of an Application Service in Hexagonal Architecture?**
+**5.** What is the primary role of an Application Service?
 
-a) Defining database table columns and ORM relationship mappings.  
-b) Orchestrating use case execution by loading entities via ports, calling domain logic, persisting changes, and managing transaction boundaries.  
-c) Rendering HTML views and parsing REST HTTP headers.  
-d) Calculating mathematical tax formulas directly using raw primitive values.  
+a) Orchestrating a use case: load via ports, invoke domain behavior, persist and manage the transaction  
+b) Holding the business rules that don't fit into entities  
+c) Translating HTTP requests into domain commands  
+d) Validating aggregate invariants before saving  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Application Services act as use case orchestrators. They coordinate workflow steps (fetch from repository port, invoke core domain business logic, save back to repository port, publish events) without containing core business decision rules themselves. Why others are incorrect: Option a belongs to ORM mappers in adapters. Option c belongs to driving web adapters. Option d belongs inside pure domain models or domain services.
+
+- a
+- It coordinates but holds no business decisions. Option b describes a Domain Service, c a driving adapter, and d the aggregate itself.
 </details>
 
 ---
 
-**6. How does a rich Domain Entity protect its business invariants?**
+**6.** How does a rich Entity protect its business invariants?
 
-a) By exposing public setters for all fields and relying on REST Controllers to validate data before assignment.  
-b) By encapsulating its state, exposing intention-revealing business methods, and validating business rules internally upon construction or mutation.  
-c) By declaring database check constraints inside SQL migration scripts.  
-d) By delegating validation logic to an external API Gateway.  
+a) Public setters plus a `validate()` method called before saving  
+b) Validation annotations (`@NotNull`, `@Size`) checked by the framework  
+c) The Application Service checks the rules before modifying it  
+d) Private state changed only through business methods that validate rules  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Encapsulation ensures an entity can never enter an invalid state. By making fields private and mutating state only through methods that validate rules (throwing domain exceptions on failure), invariants are guaranteed. Why others are incorrect: Option a creates an "Anemic Domain Model" vulnerable to invalid state. Options c and d push business validation away from the core into external tools.
+
+- d
+- With encapsulation, the entity can never be in an invalid state. Options a and c allow invalid states between calls, and b couples the domain to a framework.
 </details>
 
 ---
 
-**7. If business domain experts change a core term from "Customer" to "Subscriber", how should the development team respond inside a Hexagonal application?**
+**7.** Business experts rename a core concept from "Customer" to "Subscriber". What should the team do?
 
-a) Update only the frontend UI templates and leave the backend domain code named `Customer`.  
-b) Refactor the core domain code (class names, methods, variables, exceptions) to reflect "Subscriber" directly.  
-c) Add an alias comment above the `Customer` class in the code without changing the class name.  
-d) Change only the database column and table names in SQL.  
+a) Keep `Customer` in code and document the mapping in a glossary  
+b) Refactor the core (classes, methods, exceptions) to use "Subscriber"  
+c) Rename only the API and UI, since that is what the business sees  
+d) Create a `Subscriber` class extending `Customer` for compatibility  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Under Ubiquitous Language, the code must reflect the exact mental model of business experts. If business terminology changes, the domain model in the code must be refactored to match, eliminating translation friction. Why others are incorrect: Options a, c, and d create a disconnect between business concepts and source code, breaking Ubiquitous Language.
+
+- b
+- Code must follow the Ubiquitous Language. Keeping old terms creates constant mental translation and misunderstandings.
 </details>
 
 ---
 
-**8. Which scenario describes an "Anemic Domain Model" anti-pattern inside the Domain Core?**
+**8.** Which scenario describes an Anemic Domain Model?
 
-a) An entity with business methods like `order.cancel()` and `order.applyDiscount()` that enforce internal rules.  
-b) An entity that contains only private fields with public getters and setters, while all business logic resides in external service classes.  
-c) A Value Object that throws an exception when initialized with an invalid email string.  
-d) A Domain Service calculating complex interest rates across multiple bank accounts.  
+a) An entity that validates its invariants in the constructor  
+b) A Value Object with methods such as `add()` and `isGreaterThan()`  
+c) Entities with only getters and setters, while all business logic lives in service classes  
+d) A Domain Service coordinating a rule across two aggregates  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: An Anemic Domain Model uses entities purely as data containers (getters/setters) with no behavior. Business logic is scattered across service layers, turning OO design into procedural code. Why others are incorrect: Options a, c, and d represent proper rich domain models, valid value objects, and appropriate domain services.
+
+- c
+- Entities become data containers and logic turns procedural. The other options are signs of a healthy, rich model.
 </details>
 
 ---
 
-**9. How should business rule violations (e.g., attempting to withdraw more money than an account balance allows) be communicated from the Domain Core?**
+**9.** How should the core report a rule violation, such as withdrawing more than the available balance?
 
-a) By returning HTTP 400 Bad Request status codes directly from domain methods.  
-b) By throwing domain-specific exceptions (e.g., `InsufficientBalanceException`) defined inside the Core.  
-c) By returning `null` or boolean `false` silently.  
-d) By throwing vendor-specific database driver exceptions.  
+a) Throw a domain exception like `InsufficientBalanceException` (or return a Result type)  
+b) Return an HTTP 422 status from the domain method  
+c) Log a warning and leave the balance unchanged  
+d) Let a database constraint fail when saving  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: The core communicates business rule failures using domain-specific exceptions that express what went wrong in business terms (`InsufficientBalanceException`). Adapters catch these and translate them to HTTP status codes or messaging failures. Why others are incorrect: Option a pollutes the domain with HTTP protocols. Option c obscures errors and risks `NullPointerExceptions`. Option d leaks database vendor implementation details into the core.
+
+- a
+- Failures are expressed in business terms. Adapters translate them into HTTP codes. Option c hides the error, and d moves the rule out of the core.
 </details>
 
 ---
 
-**10. How is equality determined between two instances of a Value Object (e.g., `Address`)?**
+**10.** How is equality determined between two `Address` Value Objects?
 
-a) By comparing their database primary key identifiers (`id`).  
-b) By comparing the structural equality of all their internal attributes (e.g., street, city, zip code).  
-c) By checking whether both objects point to the exact same reference location in memory (`==`).  
-d) Value Objects cannot be evaluated for equality.  
+a) By comparing their database identifiers  
+b) By comparing their memory references  
+c) By comparing only the most significant attribute (e.g., zip code)  
+d) By comparing all their attributes  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Value Objects have no identity. Two Value Objects are equal if all their fields/attributes contain equal values (structural equality). Why others are incorrect: Option a applies to Entities, which have primary key IDs. Option c tests memory reference, not attribute value equality. Option d is false.
+
+- d
+- Value Objects have no identity, so they use structural equality. Option a applies to Entities.
 </details>
 
 ---
 
-**11. An Application Service receives a `CancelOrderCommand` from an Inbound REST Controller. What is the correct sequence of actions for the Application Service?**
+**11.** An Application Service receives a `CancelOrderCommand`. What is the correct flow?
 
-a) Parse raw HTTP headers $\rightarrow$ execute SQL update $\rightarrow$ render JSON.  
-b) Fetch `Order` via Outbound Port $\rightarrow$ call `order.cancel()` $\rightarrow$ persist `Order` via Outbound Port.  
-c) Validate JWT signature $\rightarrow$ call database directly $\rightarrow$ return HTTP 200.  
-d) Instantiate gRPC client $\rightarrow$ update database table $\rightarrow$ trigger docker container.  
+a) Call `orderRepository.updateStatus(id, CANCELLED)` directly  
+b) Load `Order` → check its status in the service → set status via setter → save  
+c) Load `Order` via port → call `order.cancel()` → save via port  
+d) Call `order.cancel()` → load `Order` via port → save via port  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: This represents proper orchestration: retrieve the aggregate root through an abstract port, invoke the domain behavior method on the aggregate, and save the updated aggregate back through the port. Why others are incorrect: Options a, c, and d mix web framework concerns (HTTP, JWT, gRPC) and raw SQL access into the Application Service layer.
+
+- c
+- The aggregate enforces its own rules inside `cancel()`. Options a and b bypass the domain (anemic model), and d is in an impossible order.
 </details>
 
 ---
 
-**12. Why must Domain Entities avoid direct dependencies on external infrastructure components (e.g., an SMTP client for sending emails)?**
+**12.** Why should an Entity not depend directly on an SMTP client to send emails?
 
-a) To ensure domain rules can be unit-tested in-memory rapidly without network side-effects or external dependencies.  
-b) Because programming languages prohibit network calls inside entity classes.  
-c) To allow the database ORM to automatically serialize email server settings.  
-d) Because infrastructure components are only compatible with REST Controllers.  
+a) Because entities must remain serializable by the ORM  
+b) To keep domain rules testable in memory and independent of infrastructure  
+c) Because sending emails is always a Domain Service's responsibility  
+d) Because entities cannot hold references to other objects  
 
 <details>
   <summary>Solution</summary>
-- a.
-Why a is correct: Keeping entities pure guarantees they can be tested in isolation in milliseconds without mocking complex external infrastructure or sending real side-effects (like emails) during unit tests. Why others are incorrect: Option b is factually incorrect. Options c and d are irrelevant or false assumptions about infrastructure.
+
+- b
+- Infrastructure belongs behind a driven port. The entity can raise a domain event, and an adapter sends the email.
 </details>
 
 ---
 
-**13. In Domain-Driven Design within the Core, what is the primary role of an Aggregate Root?**
+**13.** What is the primary role of an Aggregate Root?
 
-a) To expose raw SQL endpoints for fast database queries.  
-b) To act as the single entry point for a cluster of associated domain objects, enforcing consistency and invariant rules for the entire boundary.  
-c) To format domain entities into JSON arrays for API responses.  
-d) To manage web server thread execution pools.  
+a) Being the single entry point to a cluster of objects and enforcing its invariants  
+b) Being the entity with the most attributes in the bounded context  
+c) Providing a base class that all entities extend to share an ID  
+d) Loading child entities from the database on demand  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: An Aggregate Root is the root entity of an aggregate boundary. External objects can only hold references to the Aggregate Root, ensuring all changes to internal child objects pass through the root to enforce business invariants. Why others are incorrect: Options a, c, and d describe database, presentation, or web server responsibilities.  
+
+- a
+- External code references only the root, so every change passes through it and the aggregate stays consistent.
 </details>
 
 ---
 
-**14. Which method signature in a Domain Entity indicates a leakage of technical jargon rather than clean Ubiquitous Language?**
+**14.** Which entity method signature leaks technical jargon instead of Ubiquitous Language?
 
 a) `order.approve()`  
 b) `account.withdraw(Money amount)`  
-c) `user.updateStatusFlagInDbTable(int status)`  
-d) `subscription.renew()`  
+c) `subscription.renew()`  
+d) `user.updateStatusFlagInDbTable(int status)`  
 
 <details>
   <summary>Solution</summary>
-- c.
-Why c is correct: `updateStatusFlagInDbTable` uses database and technical jargon (`DbTable`, `statusFlag`, `update`). In Ubiquitous Language, methods describe business actions (e.g., `user.activate()`, `user.suspend()`). Why others are incorrect: Options a, b, and d express pure business operations.
+
+- d
+- It describes storage, not a business action. Prefer intention-revealing names like `user.activate()` or `user.suspend()`.
 </details>
 
 ---
 
-**15. What is the main purpose of using a Domain Factory (or Factory Method) within the Application Core?**  
+**15.** What is the main purpose of a Factory in the domain core?
 
-a) To convert domain entities into ORM database models.   
-b) To encapsulate complex creation logic of an Entity or Aggregate Root, ensuring all invariants are validated upon instantiation.  
-c) To automatically generate REST controllers at application boot time.  
-d) To mock outbound ports during integration testing.  
+a) Mapping domain entities to ORM models  
+b) Creating test doubles for ports  
+c) Encapsulating complex creation of an aggregate, so it is valid from instantiation  
+d) Registering adapters in the dependency injection container  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: When creating a complex domain aggregate requires multi-step construction or intricate invariant validation, a Factory encapsulates creation logic so that an invalid object can never be instantiated. Why others are incorrect: Option a describes a Mapper. Option c describes framework code generation. Option d describes test doubles.
+
+- c
+- Factories guarantee invariants at creation time. Option a describes a mapper, b test doubles, and d the composition root.
 </details>
+
+---

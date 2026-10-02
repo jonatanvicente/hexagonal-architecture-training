@@ -1,216 +1,245 @@
 # 🧠 Module 3 Quiz: Communication and Data Flow
 
-**Goal:** Evaluate understanding of boundary contracts, decoupling entry and exit points, adapter responsibilities, DTO mapping strategies, exception translation, and package structures inside Hexagonal Architecture.
+🧪 **Goal:** Assess understanding of ports, adapters, DTO mapping and exception translation across the hexagon's boundaries.
 
 ---
 
-**1. What is the primary role of a Driving (Inbound) Port in Hexagonal Architecture?**  
-a) To expose raw SQL queries to external web controllers.  
-b) To define abstract entry point contracts (use cases) that the Core exposes to external triggers.  
-c) To implement concrete database connection drivers.  
-d) To handle HTTP request authentication middleware.  
+**1.** What is the primary role of a Driving (Inbound) Port?
+
+a) Implementing the use case workflow and handling transactions  
+b) Defining, as an interface in the core, the use cases the application exposes  
+c) Translating HTTP requests into commands for the application  
+d) Defining what the core needs from external systems, such as persistence  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: A Driving (Inbound) Port is an interface defined inside the Application Core that specifies what use cases or entry capabilities the application offers to the outside world. External drivers (like REST Controllers, CLI scripts, or messaging queue consumers) call this interface contract to execute business logic.
-Why a is incorrect: Exposing SQL queries directly to web controllers leaks database implementation details to the outside edge, breaking layer isolation.
-Why c is incorrect: Implementing database connection drivers is a responsibility of Driven (Outbound) Adapters, not Driving Ports.
-Why d is incorrect: Handling HTTP authentication middleware is an infrastructure concern handled at the web adapter edge before reaching the port.
+
+- b
+- It is the entry contract of the core. Option a describes the Application Service, c the driving adapter, and d a driven port.
 </details>
 
 ---
 
-**2. Which component is responsible for receiving an HTTP JSON payload, deserializing it into an input DTO, and calling a Driving Port?**  
-a) Driven (Outbound) Adapter  
-b) Application Service  
-c) Driving (Inbound) Adapter  
-d) Value Object  
+**2.** Which component receives an HTTP JSON payload, converts it into a command and calls a Driving Port?
+
+a) Application Service  
+b) Driven Adapter  
+c) Driving Port  
+d) Driving Adapter  
 
 <details>
   <summary>Solution</summary>
-- c.
-Why c is correct: A Driving Adapter (such as a REST Controller) sits on the entry boundary. Its job is protocol translation: receiving protocol-specific input (HTTP JSON), transforming it into a clean command or DTO, and calling the Driving Port. Why others are incorrect: Option a handles outbound calls (databases/external APIs). Option b orchestrates business use cases. Option d represents immutable domain values inside the Core.
+
+- d
+- Driving adapters translate a protocol (HTTP, CLI, messaging) into calls to the core.
 </details>
 
 ---
 
-**3. Why must a Driven (Outbound) Port interface refrain from returning ORM/JPA database entities to the Application Service?**  
-a) Because returning ORM entities leaks persistence framework details into the Core and introduces ORM proxy issues.  
-b) Because ORM entities cannot be converted into JSON format.  
-c) Because interfaces in object-oriented programming are forbidden from returning class instances.  
-d) Because Driven Ports are restricted to returning primitive types like integers and strings.  
+**3.** Why shouldn't a Driven Port return ORM/JPA entities to the Application Service?
+
+a) It leaks persistence details into the core and exposes it to ORM issues like lazy loading  
+b) ORM entities cannot be used outside the repository's package  
+c) Ports may only return primitives or DTOs  
+d) ORM entities are slower to pass between layers than domain objects  
 
 <details>
   <summary>Solution</summary>
-- a.
-Why a is correct: Returning ORM entities across the port boundary couples the Core to persistence annotations and database frameworks. It also risks `LazyInitializationException` errors when accessing unmapped relations outside active DB sessions. Why others are incorrect: Option b is false (JSON serializers can serialize ORM entities, though it's an anti-pattern). Options c and d are false OOP constraints.
+
+- a
+- Ports speak the domain's language. ORM entities couple the core to the persistence framework and can cause errors like `LazyInitializationException`.
 </details>
 
 ---
 
-**4. How does the Interface Segregation Principle (ISP) apply to the design of Driven (Outbound) Ports?**  
-a) Every database repository must implement a single global interface containing all CRUD operations for the application.  
-b) Ports must only contain static methods and constant variables.  
-c) Driven Ports should be narrow and specialized to specific use case needs rather than giant, fat interfaces.  
-d) Driven Ports must be segregated into separate microservices on the network.  
+**4.** How does the Interface Segregation Principle apply to Driven Ports?
+
+a) One generic repository port for the whole application, reused by all use cases  
+b) One driven port per database table  
+c) Narrow ports tailored to what the core needs (e.g., `OrderReader`, `OrderWriter`)  
+d) One port per technology, such as `JpaPort` or `MongoPort`  
 
 <details>
   <summary>Solution</summary>
-- c.
-Why b is correct: ISP dictates that clients should not be forced to depend on methods they do not use. Designing focused, role-based Driven Ports (e.g., `OrderReaderPort`, `OrderWriterPort`) prevents Application Services from depending on unnecessary persistence operations. Why others are incorrect: Option a creates monolithic "fat" interfaces violating ISP. Options b and d confuse ISP with language syntax or network deployment strategies.
+
+- c
+- Clients shouldn't depend on methods they don't use. Options b and d let storage or technology shape the core's contracts.
 </details>
 
 ---
 
-**5. An outbound payment adapter fails due to a network timeout calling an external Stripe REST API. Where should the low-level HTTP exception be caught and translated into a domain exception?**  
-a) Inside the Domain Entity logic.  
-b) Inside the Payment Driven Adapter.  
-c) Inside the Inbound REST Controller.  
-d) Inside the Application Service method.  
+**5.** A payment adapter gets a network timeout from an external payment API. Where should this exception be translated into a domain exception?
+
+a) In the payment driven adapter  
+b) In the Application Service, with a try/catch around the port call  
+c) In the REST controller's global exception handler  
+d) In the domain entity that requested the payment  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Adapters encapsulate technical infrastructure mechanics. The Driven Adapter must catch vendor-specific SDK/HTTP errors (`HttpClientErrorException`) and map them into domain-meaningful exceptions (`PaymentGatewayDownException`) defined in the Core before throwing them upward. Why others are incorrect: Option a pollutes entities with HTTP logic. Options c and d force the Core or entry controller to know about external network library exceptions.
+
+- a
+- The adapter owns the technical details. Options b, c and d force other components to know HTTP client exceptions.
 </details>
 
 ---
 
-**6. What is the role of a Data Mapper within a Driven (Secondary) Adapter?**  
-a) To map HTTP endpoints to web controller handlers.  
-b) To automatically create database tables during application startup.  
-c) To map domain objects into HTML templates.  
-d) To translate between infrastructure data representations (e.g., ORM Entities, Mongo documents) and pure Domain Entities.  
+**6.** What is the role of a Data Mapper within a Driven Adapter?
+
+a) Mapping HTTP requests to command objects  
+b) Mapping domain objects to response DTOs for the API  
+c) Generating database tables from domain entities at startup  
+d) Translating between persistence models (ORM entities, documents) and domain entities  
 
 <details>
   <summary>Solution</summary>
-- d.
-Why d is correct: A Data Mapper inside a Driven Adapter translates data bidirectionally between the persistence layer format (database rows/ORM objects) and pure domain aggregates used inside the Core. Why others are incorrect: Option a describes routing. Option c describes view rendering. Option b describes database schema migration tools (like Liquibase or Flyway).
+
+- d
+- It works in both directions at the persistence boundary. Options a and b are mappings, but they belong to driving adapters.
 </details>
 
 ---
 
-**7. Why are Command DTOs used at the Driving Adapter boundary instead of passing framework request objects (e.g., `HttpServletRequest`) directly into the Core?**
-a) Command DTOs decouple the Core from web framework abstractions, allowing entry points to be triggered by non-HTTP callers (like CLI tools or message consumers).  
-b) `HttpServletRequest` objects cannot be passed into methods in modern programming languages.  
-c) Command DTOs automatically encrypt data sent over network channels.  
-d) Framework request objects prevent database transactions from executing.  
+**7.** Why pass a Command DTO to the core instead of a framework object like `HttpServletRequest`?
+
+a) Command DTOs are faster to serialize than request objects  
+b) The core stays independent of the delivery mechanism, so CLI, consumers or tests can reuse the use case  
+c) Request objects cannot be validated with annotations  
+d) Command DTOs let the core read HTTP headers in a type-safe way  
 
 <details>
   <summary>Solution</summary>
-- a.
-Why a is correct: Using framework-neutral Command DTOs ensures that the Application Core remains unaware of the delivery mechanism. The exact same use case can be called by an HTTP Controller, a Kafka Consumer, or an automated test without modifying the Core. Why others are incorrect: Option b is factually false. Options c and d are false claims regarding security and transaction management.
+
+- b
+- Framework-neutral inputs make use cases callable from any driving adapter without changes.
 </details>
 
 ---
 
-**8. In a Hexagonal application, how is a messaging queue consumer (e.g., a RabbitMQ listener) categorized?**
-a) As a Driven Adapter because messaging queue drivers are infrastructure libraries.  
-b) As a Driving Adapter because it receives external triggers, converts payloads into commands, and invokes a Driving Port.  
-c) As a Domain Service inside the Application Core.  
-d) As a Value Object encapsulating message strings.  
+**8.** How is a RabbitMQ message listener categorized?
+
+a) Driven adapter, because messaging libraries are infrastructure  
+b) Driven port, because the broker is an external system  
+c) Driving adapter, because it triggers a use case from an external event  
+d) Application Service, because it orchestrates message processing  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Primary/Driving components initiate execution into the core. A queue consumer listens for incoming messages, parses payloads, and drives the application by invoking an Inbound Use Case Port. Why others are incorrect: Option a confuses outbound infrastructure calls with inbound drivers. Options c and d misclassify an infrastructure trigger as a core domain element.
+
+- c
+- Direction defines the role, not the technology. A RabbitMQ publisher, instead, would be a driven adapter.
 </details>
 
 ---
 
-**9. What is the structural flaw if an Application Service instantiates a concrete database adapter directly via `new SqlUserRepository()`?**
-a) It causes compilation errors in object-oriented compilers.  
-b) It automatically converts the application into a distributed monolith.  
-c) It violates Dependency Inversion, coupling the Application Core directly to a concrete infrastructure implementation.  
-d) It forces the application to run without an application server context.  
+**9.** What is the flaw if an Application Service creates `new SqlUserRepository()` directly?
+
+a) It prevents the use of database transactions  
+b) It creates a new connection pool on every call  
+c) It breaks the Single Responsibility Principle of the repository  
+d) It violates Dependency Inversion, coupling the core to a concrete adapter  
 
 <details>
   <summary>Solution</summary>
-- c.
-Why c is correct: Directly instantiating concrete adapters inside the Core hardcodes infrastructure dependencies. To achieve decoupling, the Application Service must depend on abstract Driven Ports (interfaces), letting Dependency Injection inject concrete adapters at runtime. Why others are incorrect: Option a is syntactically valid code. Option b relates to microservice network topology. Option d is irrelevant to dependency direction.
+
+- d
+- The service should depend on a driven port, with the implementation injected from outside (composition root).
 </details>
 
 ---
 
-**10. Which statement correctly describes the relationship between a Driving Port and an Application Service?**  
-a) The Application Service defines the Driving Port interface, and the REST Controller implements it.  
-b) The Driving Port is an interface defined in the Core, and the Application Service implements it to fulfill the use case contract.  
-c) The Driving Port inherits concrete logic directly from the Application Service.  
-d) The Driving Port is an infrastructure class that invokes the Application Service via reflection.  
+**10.** What is the relationship between a Driving Port and an Application Service?
+
+a) The port is an interface in the core; the Application Service implements it  
+b) The Application Service is an interface; the controller implements it  
+c) The driving adapter implements the port and then calls the Application Service  
+d) The port is an infrastructure class that delegates to the Application Service  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: The Driving Port defines *what* the application can do (the interface), while the Application Service implements *how* the use case workflow is executed. Why others are incorrect: Option a misplaces the interface implementation. Options c and d confuse interface implementation with inheritance or reflection mechanisms.
+
+- a
+- The port defines *what* the application offers. The service defines *how* the use case runs. The adapter only calls the port.
 </details>
 
 ---
 
-**11. What is "Port Pollution" in Hexagonal Architecture?**  
-a) Leaking framework-specific types (e.g., `Spring Pageable`, `JPA Criteria`, `Express Request`) into Port interface signatures.  
-b) Creating too many unit tests for the core domain.  
-c) Implementing Driven Ports using dependency injection frameworks.  
-d) Defining ports using domain-driven naming conventions.  
+**11.** A driven port declares `findAll(Pageable pageable)` using Spring Data's `Pageable`. What is the problem?
+
+a) None, since `Pageable` is a standard pagination abstraction  
+b) Ports must never support pagination, since it is a UI concern  
+c) A framework type leaks into the core's contract, coupling it to Spring  
+d) The method should return ORM entities to support lazy pagination  
 
 <details>
   <summary>Solution</summary>
-- a.
-Why a is correct: Port Pollution occurs when infrastructure-specific abstractions or framework classes leak into port method signatures (e.g., `findAll(Pageable pageable)`). Ports must use pure domain models, primitives, or domain-level abstractions. Why others are incorrect: Option b is good practice. Options c and d describe standard, correct Hexagonal practices.
+
+- c
+- Port signatures must use domain or neutral types. Define your own value object (e.g., `PageRequest`) and map it in the adapter.
 </details>
 
 ---
 
-**12. How should an Outbound REST Adapter (e.g., communicating with a Third-Party CRM) return results to the Application Core?**  
-a) By returning raw HTTP response string bodies (`ResponseEntity<String>`).  
-b) By mapping the third-party HTTP JSON response into pure domain objects or Value Objects required by the Driven Port.  
-c) By saving the HTTP response directly into the application's SQL database table before returning.  
-d) By returning the third-party API's vendor-specific SDK objects directly.  
+**12.** How should a driven adapter for a third-party CRM API return results to the core?
+
+a) Return the vendor's SDK objects, since they are already typed  
+b) Map the external response into domain objects defined by the port  
+c) Return the raw JSON so the Application Service extracts what it needs  
+d) Return a generic `Map<String, Object>` to stay flexible against API changes  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Outbound Adapters must isolate the Core from third-party schemas. They map external vendor payloads into domain concepts defined by the Port contract, ensuring vendor changes don't break business logic. Why others are incorrect: Options a and d expose low-level or vendor-specific formats to the Core. Option c mixes persistence side effects into an external communication adapter.
+
+- b
+- The adapter shields the core from external schemas, so vendor changes only affect the adapter.
 </details>
 
 ---
 
-**13. What is the key distinction between a Command DTO and a Response DTO at the Driving boundary?**  
-a) Command DTOs carry intent and input values required to execute an action; Response DTOs encapsulate output data formatted for external consumers.  
-b) Command DTOs contain database ORM annotations; Response DTOs contain SQL statements.  
-c) Command DTOs are used exclusively for relational databases; Response DTOs are used for NoSQL databases.  
-d) Command DTOs are mutable entities; Response DTOs are database tables.  
+**13.** What is the key difference between a Command DTO and a Response DTO at the driving boundary?
+
+a) Command DTOs are always validated inside entities, while Response DTOs are validated by adapters  
+b) Command DTOs belong to driven ports, while Response DTOs belong to driving ports  
+c) Command DTOs are mutable, while Response DTOs must be domain entities  
+d) Command DTOs carry the input and intent of an action; Response DTOs carry output for the caller  
 
 <details>
   <summary>Solution</summary>
-- a.
-Why a is correct: Command DTOs represent write/execute operations (inputs like `RegisterUserCommand`), whereas Response DTOs represent query or execution results formatted specifically for external callers (outputs like `UserRegistrationResponse`). Why others are incorrect: Options b, c, and d introduce false associations with database mechanics and ORM mappings.
+
+- d
+- Example: `RegisterUserCommand` as input and `UserRegistrationResponse` as output. Neither should expose domain entities directly.
 </details>
 
 ---
 
-**14. When organizing a Hexagonal codebase using "Package by Feature", where should the adapter packages reside?**  
-a) In a completely separate global top-level project module completely disconnected from features.  
-b) Inside the feature package boundary (e.g., `com.app.order.adapter`), cleanly separated from `domain` and `port` sub-packages.  
-c) Directly inside the `com.app.order.domain.model` package alongside entities.  
-d) In the root system directory alongside build scripts.  
+**14.** Using "Package by Feature", where should adapters live?
+
+a) Inside the feature package, e.g. `com.app.order.adapter`, next to `domain` and `port`  
+b) In a global `com.app.adapters` package shared by all features  
+c) Inside `com.app.order.domain`, next to the entities they persist  
+d) In a separate `infrastructure` module containing the adapters of all features  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: In Package by Feature, all code for a business capability (`order`) is co-located. Inside `com.app.order`, sub-packages (`domain`, `port`, `adapter`) keep architectural boundaries explicit while maintaining high domain cohesion. Why others are incorrect: Option a describes Package by Layer. Option c breaks isolation by mixing infrastructure adapters with pure domain models. Option d is invalid package organization.
+
+- a
+- Each feature keeps all its code together with explicit sub-packages. Options b and d group by layer, and c mixes infrastructure into the domain.
 </details>
 
 ---
 
-**15. How does Hexagonal Architecture simplify replacing a database engine (e.g., migrating from PostgreSQL to MongoDB)?**  
-a) By automatically converting SQL queries into MongoDB aggregation pipelines at runtime.  
-b) By forcing Application Services and Domain Entities to be rewritten using MongoDB drivers.  
-c) By requiring changes only inside a new Driven Adapter that implements the existing Driven Port, leaving the Application Core completely untouched.  
-d) Infrastructure components cannot be changed once a Hexagonal system is built.  
+**15.** How does Hexagonal Architecture help when migrating from PostgreSQL to MongoDB?
+
+a) The core is rewritten for the MongoDB driver while the adapters stay the same  
+b) The ORM automatically translates SQL queries into MongoDB queries  
+c) A new driven adapter implements the existing port, so changes are mostly confined to infrastructure  
+d) Both databases must run in parallel permanently to keep the core unchanged  
 
 <details>
   <summary>Solution</summary>
-- c.
-Why c is correct: Because the Core depends only on abstract Driven Ports, swapping persistence tech involves creating a new MongoDB Driven Adapter that implements the existing port interface and updating the DI configuration. The Core logic requires zero code changes. Why others are incorrect: Option a claims automated runtime conversion which doesn't exist. Option b describes the flaw of coupled non-hexagonal systems. Option d is false.
+
+- c
+- The core depends only on ports. Some adjustments may still be needed if the new store offers different guarantees, such as transactions or query capabilities.
 </details>
+
+---
