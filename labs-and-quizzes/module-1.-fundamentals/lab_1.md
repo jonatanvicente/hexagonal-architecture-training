@@ -1,34 +1,33 @@
-# 🧪 Module 1 Lab: Fundamentals
+# Lab 1
 
-> 📦 **STARTER CODE REQUIRED: `library-legacy`.** A tiny "Library Loans" app with 4 to 5 classes, runnable locally with one command, using in-memory storage (a list or map, no real database). 
+> 📦 **STARTER CODE REQUIRED: `library-legacy`.** A tiny "Library Loans" app with 4 to 5 classes, runnable locally with one command, using in-memory storage (a list or map, no real database).
 
----
+***
 
 ### 🧩 Exercise 1: Spot the Problems
 
-**Objective:**
-Recognize coupling in a classic layered (n-tier) design.
+**Objective:** Recognize coupling in a classic layered (n-tier) design.
 
 **Steps:**
 
 1. Run the app and read the code (about 10 minutes).
 2. **Without AI**, draw the dependencies between classes as boxes and arrows ("A uses B").
 3. Answer these three questions in `NOTES.md`:
-   - Where is the business rule?
-   - Which classes does `LoanService` depend on directly?
-   - What would you need to change to send SMS instead of email?
+   * Where is the business rule?
+   * Which classes does `LoanService` depend on directly?
+   * What would you need to change to send SMS instead of email?
 4. Now ask the AI the same questions and compare its answers with yours.
 
 **Expected Result:**
-- A simple diagram showing `Controller → Service → MySqlLoanRepository / SmtpEmailSender`.
-- The students notice that the business logic depends on technical details, and that changing email to SMS means editing `LoanService`.
 
----
+* A simple diagram showing `Controller → Service → MySqlLoanRepository / SmtpEmailSender`.
+* The students notice that the business logic depends on technical details, and that changing email to SMS means editing `LoanService`.
+
+***
 
 ### 🧩 Exercise 2: Separate Concerns and Invert One Dependency
 
-**Objective:**
-Apply Separation of Concerns and the Dependency Inversion Principle (DIP) to the notification part.
+**Objective:** Apply Separation of Concerns and the Dependency Inversion Principle (DIP) to the notification part.
 
 **Steps:**
 
@@ -41,16 +40,16 @@ Apply Separation of Concerns and the Dependency Inversion Principle (DIP) to the
 7. Run the app; it must behave exactly as before.
 
 **Expected Result:**
-- `LoanService` only knows interfaces; there is no `new` of technical classes inside it.
-- All objects are created in one place, `main`.
-- The app works the same as before.
 
----
+* `LoanService` only knows interfaces; there is no `new` of technical classes inside it.
+* All objects are created in one place, `main`.
+* The app works the same as before.
+
+***
 
 ### 🧩 Exercise 3: Your First Hexagon
 
-**Objective:**
-Identify ports and adapters, and prove that new adapters don't change the core.
+**Objective:** Identify ports and adapters, and prove that new adapters don't change the core.
 
 **Steps:**
 
@@ -62,10 +61,11 @@ Identify ports and adapters, and prove that new adapters don't change the core.
 6. Check that `core` has no imports from `adapters`, for example with `grep -r "adapters" core/` (it should return nothing).
 
 **Expected Result:**
-- The SMS notifier works, and the core files are unchanged.
-- `grep` finds no imports of adapters inside `core`.
-- The students can draw the hexagon: the core in the center, ports on the border, adapters outside.
 
----
+* The SMS notifier works, and the core files are unchanged.
+* `grep` finds no imports of adapters inside `core`.
+* The students can draw the hexagon: the core in the center, ports on the border, adapters outside.
+
+***
 
 **⏱️ Suggested timing:** theory 1.5 h, Ex1 30 min, Ex2 45 min, Ex3 45 min.
