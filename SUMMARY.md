@@ -22,3 +22,4 @@
   * [Final Project. From Monolith to Hexagon](labs-and-quizzes/final-project.-from-monolith-to-hexagon/README.md)
     * [Lab Final](labs-and-quizzes/final-project.-from-monolith-to-hexagon/lab_final.md)
     * [Final Project Quiz](labs-and-quizzes/final-project.-from-monolith-to-hexagon/final_project.md)
+* [Quick Guide](quick_guide.md)
