@@ -36,29 +36,29 @@ Why c is correct: A Driving Adapter (such as a REST Controller) sits on the entr
 ---
 
 **3. Why must a Driven (Outbound) Port interface refrain from returning ORM/JPA database entities to the Application Service?**  
-a) Because ORM entities cannot be converted into JSON format.  
-b) Because returning ORM entities leaks persistence framework details into the Core and introduces ORM proxy issues.  
+a) Because returning ORM entities leaks persistence framework details into the Core and introduces ORM proxy issues.  
+b) Because ORM entities cannot be converted into JSON format.  
 c) Because interfaces in object-oriented programming are forbidden from returning class instances.  
 d) Because Driven Ports are restricted to returning primitive types like integers and strings.  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Returning ORM entities across the port boundary couples the Core to persistence annotations and database frameworks. It also risks `LazyInitializationException` errors when accessing unmapped relations outside active DB sessions. Why others are incorrect: Option a is false (JSON serializers can serialize ORM entities, though it's an anti-pattern). Options c and d are false OOP constraints.
+- a.
+Why a is correct: Returning ORM entities across the port boundary couples the Core to persistence annotations and database frameworks. It also risks `LazyInitializationException` errors when accessing unmapped relations outside active DB sessions. Why others are incorrect: Option b is false (JSON serializers can serialize ORM entities, though it's an anti-pattern). Options c and d are false OOP constraints.
 </details>
 
 ---
 
 **4. How does the Interface Segregation Principle (ISP) apply to the design of Driven (Outbound) Ports?**  
 a) Every database repository must implement a single global interface containing all CRUD operations for the application.  
-b) Driven Ports should be narrow and specialized to specific use case needs rather than giant, fat interfaces.  
-c) Ports must only contain static methods and constant variables.  
+b) Ports must only contain static methods and constant variables.  
+c) Driven Ports should be narrow and specialized to specific use case needs rather than giant, fat interfaces.  
 d) Driven Ports must be segregated into separate microservices on the network.  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: ISP dictates that clients should not be forced to depend on methods they do not use. Designing focused, role-based Driven Ports (e.g., `OrderReaderPort`, `OrderWriterPort`) prevents Application Services from depending on unnecessary persistence operations. Why others are incorrect: Option a creates monolithic "fat" interfaces violating ISP. Options c and d confuse ISP with language syntax or network deployment strategies.
+- c.
+Why b is correct: ISP dictates that clients should not be forced to depend on methods they do not use. Designing focused, role-based Driven Ports (e.g., `OrderReaderPort`, `OrderWriterPort`) prevents Application Services from depending on unnecessary persistence operations. Why others are incorrect: Option a creates monolithic "fat" interfaces violating ISP. Options b and d confuse ISP with language syntax or network deployment strategies.
 </details>
 
 ---
@@ -79,28 +79,28 @@ Why b is correct: Adapters encapsulate technical infrastructure mechanics. The D
 
 **6. What is the role of a Data Mapper within a Driven (Secondary) Adapter?**  
 a) To map HTTP endpoints to web controller handlers.  
-b) To translate between infrastructure data representations (e.g., ORM Entities, Mongo documents) and pure Domain Entities.  
+b) To automatically create database tables during application startup.  
 c) To map domain objects into HTML templates.  
-d) To automatically create database tables during application startup.  
+d) To translate between infrastructure data representations (e.g., ORM Entities, Mongo documents) and pure Domain Entities.  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: A Data Mapper inside a Driven Adapter translates data bidirectionally between the persistence layer format (database rows/ORM objects) and pure domain aggregates used inside the Core. Why others are incorrect: Option a describes routing. Option c describes view rendering. Option d describes database schema migration tools (like Liquibase or Flyway).
+- d.
+Why d is correct: A Data Mapper inside a Driven Adapter translates data bidirectionally between the persistence layer format (database rows/ORM objects) and pure domain aggregates used inside the Core. Why others are incorrect: Option a describes routing. Option c describes view rendering. Option b describes database schema migration tools (like Liquibase or Flyway).
 </details>
 
 ---
 
 **7. Why are Command DTOs used at the Driving Adapter boundary instead of passing framework request objects (e.g., `HttpServletRequest`) directly into the Core?**
-a) `HttpServletRequest` objects cannot be passed into methods in modern programming languages.  
-b) Command DTOs decouple the Core from web framework abstractions, allowing entry points to be triggered by non-HTTP callers (like CLI tools or message consumers).  
+a) Command DTOs decouple the Core from web framework abstractions, allowing entry points to be triggered by non-HTTP callers (like CLI tools or message consumers).  
+b) `HttpServletRequest` objects cannot be passed into methods in modern programming languages.  
 c) Command DTOs automatically encrypt data sent over network channels.  
 d) Framework request objects prevent database transactions from executing.  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Using framework-neutral Command DTOs ensures that the Application Core remains unaware of the delivery mechanism. The exact same use case can be called by an HTTP Controller, a Kafka Consumer, or an automated test without modifying the Core. Why others are incorrect: Option a is factually false. Options c and d are false claims regarding security and transaction management.
+- a.
+Why a is correct: Using framework-neutral Command DTOs ensures that the Application Core remains unaware of the delivery mechanism. The exact same use case can be called by an HTTP Controller, a Kafka Consumer, or an automated test without modifying the Core. Why others are incorrect: Option b is factually false. Options c and d are false claims regarding security and transaction management.
 </details>
 
 ---
@@ -121,14 +121,14 @@ Why b is correct: Primary/Driving components initiate execution into the core. A
 
 **9. What is the structural flaw if an Application Service instantiates a concrete database adapter directly via `new SqlUserRepository()`?**
 a) It causes compilation errors in object-oriented compilers.  
-b) It violates Dependency Inversion, coupling the Application Core directly to a concrete infrastructure implementation.  
-c) It automatically converts the application into a distributed monolith.  
+b) It automatically converts the application into a distributed monolith.  
+c) It violates Dependency Inversion, coupling the Application Core directly to a concrete infrastructure implementation.  
 d) It forces the application to run without an application server context.  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Directly instantiating concrete adapters inside the Core hardcodes infrastructure dependencies. To achieve decoupling, the Application Service must depend on abstract Driven Ports (interfaces), letting Dependency Injection inject concrete adapters at runtime. Why others are incorrect: Option a is syntactically valid code. Option c relates to microservice network topology. Option d is irrelevant to dependency direction.
+- c.
+Why c is correct: Directly instantiating concrete adapters inside the Core hardcodes infrastructure dependencies. To achieve decoupling, the Application Service must depend on abstract Driven Ports (interfaces), letting Dependency Injection inject concrete adapters at runtime. Why others are incorrect: Option a is syntactically valid code. Option b relates to microservice network topology. Option d is irrelevant to dependency direction.
 </details>
 
 ---
@@ -148,15 +148,15 @@ Why b is correct: The Driving Port defines *what* the application can do (the in
 ---
 
 **11. What is "Port Pollution" in Hexagonal Architecture?**  
-a) Creating too many unit tests for the core domain.  
-b) Leaking framework-specific types (e.g., `Spring Pageable`, `JPA Criteria`, `Express Request`) into Port interface signatures.  
+a) Leaking framework-specific types (e.g., `Spring Pageable`, `JPA Criteria`, `Express Request`) into Port interface signatures.  
+b) Creating too many unit tests for the core domain.  
 c) Implementing Driven Ports using dependency injection frameworks.  
 d) Defining ports using domain-driven naming conventions.  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Port Pollution occurs when infrastructure-specific abstractions or framework classes leak into port method signatures (e.g., `findAll(Pageable pageable)`). Ports must use pure domain models, primitives, or domain-level abstractions. Why others are incorrect: Option a is good practice. Options c and d describe standard, correct Hexagonal practices.
+- a.
+Why a is correct: Port Pollution occurs when infrastructure-specific abstractions or framework classes leak into port method signatures (e.g., `findAll(Pageable pageable)`). Ports must use pure domain models, primitives, or domain-level abstractions. Why others are incorrect: Option b is good practice. Options c and d describe standard, correct Hexagonal practices.
 </details>
 
 ---
@@ -205,12 +205,12 @@ Why b is correct: In Package by Feature, all code for a business capability (`or
 
 **15. How does Hexagonal Architecture simplify replacing a database engine (e.g., migrating from PostgreSQL to MongoDB)?**  
 a) By automatically converting SQL queries into MongoDB aggregation pipelines at runtime.  
-b) By requiring changes only inside a new Driven Adapter that implements the existing Driven Port, leaving the Application Core completely untouched.  
-c) By forcing Application Services and Domain Entities to be rewritten using MongoDB drivers.  
+b) By forcing Application Services and Domain Entities to be rewritten using MongoDB drivers.  
+c) By requiring changes only inside a new Driven Adapter that implements the existing Driven Port, leaving the Application Core completely untouched.  
 d) Infrastructure components cannot be changed once a Hexagonal system is built.  
 
 <details>
   <summary>Solution</summary>
-- b.
-Why b is correct: Because the Core depends only on abstract Driven Ports, swapping persistence tech involves creating a new MongoDB Driven Adapter that implements the existing port interface and updating the DI configuration. The Core logic requires zero code changes. Why others are incorrect: Option a claims automated runtime conversion which doesn't exist. Option c describes the flaw of coupled non-hexagonal systems. Option d is false.
+- c.
+Why c is correct: Because the Core depends only on abstract Driven Ports, swapping persistence tech involves creating a new MongoDB Driven Adapter that implements the existing port interface and updating the DI configuration. The Core logic requires zero code changes. Why others are incorrect: Option a claims automated runtime conversion which doesn't exist. Option b describes the flaw of coupled non-hexagonal systems. Option d is false.
 </details>
