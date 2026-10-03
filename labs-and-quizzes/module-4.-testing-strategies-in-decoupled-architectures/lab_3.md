@@ -1,4 +1,4 @@
-# Lab 3
+# 🧪 Lab 3
 
 > 📦 **STARTER CODE REQUIRED: `library-hexagon-v2`.** Lab 2 (TypeScript/Node 22.13 or later), plus:
 > - **`SqliteLoanRepository`**, a real driven adapter using Node's built-in `node:sqlite` (no native packages to install). It accepts a file path or `":memory:"`.

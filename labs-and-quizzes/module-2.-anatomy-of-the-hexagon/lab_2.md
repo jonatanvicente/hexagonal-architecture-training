@@ -1,4 +1,4 @@
-# Lab 2
+# 🧪 Lab 2
 
 > 📦 **STARTER CODE REQUIRED: `library-hexagon-v1`.** 
 
