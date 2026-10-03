@@ -1,3 +1,3 @@
 # Installations
 
-- Node 20+
+- Node 22+

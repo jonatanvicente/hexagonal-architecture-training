@@ -1,11 +1,16 @@
 # Lab 2
 
-> 📦 **STARTER CODE REQUIRED: `library-hexagon-v1`.** The solution of Lab 1 in TypeScript/Node, with:
+> 📦 **STARTER CODE REQUIRED: `library-hexagon-v1`.** 
+
+Lab 1 code with:
 > - Folders `src/core` and `src/adapters`.
 > - `LoanService` receiving `LoanRepository` and `MemberNotifier` through its constructor.
 > - The adapters `InMemoryLoanRepository`, `ConsoleEmailNotifier`, and `SmsNotifier`.
 > - An `npm test` script using Node's built-in test runner (`node --import tsx --test`), with one sample test that passes.
 > - `Loan` still a plain interface, and IDs still plain `string`s (these get improved in this lab).
+
+
+[See at Github Repo > src/lib/lab_2/library-hexagon-v1.zip]
 
 ---
 
