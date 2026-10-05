@@ -20,6 +20,7 @@
 🧪 **Goal:** Identify the building blocks of the domain core and design ports that define its boundary and keep dependencies pointing inward.
 
 - **Domain model building blocks**
+  - Ubiquitous Language
   - Entities
   - Value Objects
   - Domain Services
@@ -70,6 +71,9 @@
 - **End-to-end validation**
   - Contract testing
   - End-to-end tests
+- **Transaction Boundaries & DB pitfalls**
+  - Cross-Cutting Concerns & Security 
+
 
 ---
 
@@ -88,6 +92,7 @@
   - Unit of Work pattern
   - Atomicity of operations
   - Dual-writes and the Transactional Outbox Pattern
+- **Netflix Success Story**
 
 ---
 
