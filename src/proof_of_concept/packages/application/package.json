@@ -1,0 +1,13 @@
+{
+  "name": "@usflights/application",
+  "version": "0.1.0",
+  "private": true,
+  "description": "INSIDE THE HEXAGON - use cases, driving ports (in) and driven ports (out). Depends only on the domain.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@usflights/domain": "*"
+  }
+}

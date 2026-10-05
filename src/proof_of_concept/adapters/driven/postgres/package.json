@@ -1,0 +1,15 @@
+{
+  "name": "@usflights/adapter-postgres",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OUTSIDE THE HEXAGON - DRIVEN adapter: implements repository ports with PostgreSQL (pg).",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@usflights/application": "*",
+    "@usflights/domain": "*",
+    "pg": "^8.23.1"
+  }
+}

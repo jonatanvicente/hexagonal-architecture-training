@@ -1,0 +1,14 @@
+{
+  "name": "@usflights/adapter-in-memory",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OUTSIDE THE HEXAGON - DRIVEN adapter: same repository ports, backed by an in-memory dataset (simulates swapping the database).",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@usflights/application": "*",
+    "@usflights/domain": "*"
+  }
+}

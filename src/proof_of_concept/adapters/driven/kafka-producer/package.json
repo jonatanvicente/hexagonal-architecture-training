@@ -1,0 +1,15 @@
+{
+  "name": "@usflights/adapter-kafka-producer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OUTSIDE THE HEXAGON - DRIVEN adapter: publishes domain events to (fake) Kafka topics via the EventPublisherPort.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@usflights/application": "*",
+    "@usflights/domain": "*",
+    "@usflights/fake-kafka": "*"
+  }
+}

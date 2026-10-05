@@ -1,0 +1,29 @@
+{
+  "name": "usflights-hexagonal-poc",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Proof of Concept: Hexagonal Architecture (Ports & Adapters) with Node 26 + TypeScript",
+  "type": "module",
+  "engines": {
+    "node": ">=26"
+  },
+  "workspaces": [
+    "packages/*",
+    "adapters/driving/*",
+    "adapters/driven/*",
+    "apps/*"
+  ],
+  "scripts": {
+    "start": "node --env-file-if-exists=.env apps/api/src/main.ts",
+    "start:memory": "PERSISTENCE=memory node --env-file-if-exists=.env apps/api/src/main.ts",
+    "dev": "node --watch --env-file-if-exists=.env apps/api/src/main.ts",
+    "cli": "node --env-file-if-exists=.env apps/cli/src/main.ts",
+    "cli:memory": "PERSISTENCE=memory node --env-file-if-exists=.env apps/cli/src/main.ts",
+    "typecheck": "tsc -p tsconfig.json"
+  },
+  "devDependencies": {
+    "@types/node": "^26.6.4",
+    "@types/pg": "^8.15.0",
+    "typescript": "^7.0.2"
+  }
+}

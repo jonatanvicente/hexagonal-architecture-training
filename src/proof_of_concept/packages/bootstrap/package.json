@@ -1,0 +1,21 @@
+{
+  "name": "@usflights/bootstrap",
+  "version": "0.1.0",
+  "private": true,
+  "description": "COMPOSITION ROOT - the only place that knows every concrete class. Reads config, picks driven adapters and wires them into the use cases.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@usflights/adapter-in-memory": "*",
+    "@usflights/adapter-kafka-producer": "*",
+    "@usflights/adapter-notification": "*",
+    "@usflights/adapter-platform": "*",
+    "@usflights/adapter-postgres": "*",
+    "@usflights/adapter-redis-cache": "*",
+    "@usflights/application": "*",
+    "@usflights/domain": "*",
+    "@usflights/fake-kafka": "*"
+  }
+}

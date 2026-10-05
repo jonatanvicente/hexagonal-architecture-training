@@ -1,0 +1,13 @@
+{
+  "name": "@usflights/adapter-cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OUTSIDE THE HEXAGON - DRIVING adapter: command line interface over the same driving ports as the REST API.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@usflights/application": "*"
+  }
+}

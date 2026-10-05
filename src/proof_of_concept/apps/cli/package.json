@@ -1,0 +1,11 @@
+{
+  "name": "@usflights/app-cli",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Runnable CLI: bootstrap container + CLI driving adapter.",
+  "type": "module",
+  "dependencies": {
+    "@usflights/adapter-cli": "*",
+    "@usflights/bootstrap": "*"
+  }
+}

@@ -1,0 +1,14 @@
+{
+  "name": "@usflights/adapter-kafka-consumer",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OUTSIDE THE HEXAGON - DRIVING adapter: consumes (fake) Kafka messages and invokes the ProcessFlightStatus driving port.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@usflights/application": "*",
+    "@usflights/fake-kafka": "*"
+  }
+}

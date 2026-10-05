@@ -1,0 +1,14 @@
+{
+  "name": "@usflights/adapter-http-rest",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OUTSIDE THE HEXAGON - DRIVING adapter: REST API (Fastify) that translates HTTP into driving-port calls.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@usflights/application": "*",
+    "fastify": "^5.12.5"
+  }
+}

@@ -1,0 +1,10 @@
+{
+  "name": "@usflights/fake-kafka",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OUTSIDE THE HEXAGON - infrastructure stand-in: an in-process message broker that mimics Kafka topics. Used by the kafka-producer (driven) and kafka-consumer (driving) adapters.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  }
+}

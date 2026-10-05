@@ -1,0 +1,13 @@
+{
+  "name": "@usflights/adapter-notification",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OUTSIDE THE HEXAGON - DRIVEN adapter: simulated e-mail/SMS gateway implementing the NotificationPort.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@usflights/application": "*"
+  }
+}

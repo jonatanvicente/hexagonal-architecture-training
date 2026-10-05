@@ -1,0 +1,15 @@
+{
+  "name": "@usflights/app-api",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Runnable REST API: bootstrap container + HTTP and Kafka driving adapters + external-system simulator.",
+  "type": "module",
+  "dependencies": {
+    "@usflights/adapter-http-rest": "*",
+    "@usflights/adapter-kafka-consumer": "*",
+    "@usflights/adapter-kafka-producer": "*",
+    "@usflights/bootstrap": "*",
+    "@usflights/fake-kafka": "*",
+    "fastify": "^5.12.5"
+  }
+}

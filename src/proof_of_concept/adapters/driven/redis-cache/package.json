@@ -1,0 +1,13 @@
+{
+  "name": "@usflights/adapter-redis-cache",
+  "version": "0.1.0",
+  "private": true,
+  "description": "OUTSIDE THE HEXAGON - DRIVEN adapter: simulated Redis implementing the CachePort.",
+  "type": "module",
+  "exports": {
+    ".": "./src/index.ts"
+  },
+  "dependencies": {
+    "@usflights/application": "*"
+  }
+}
