@@ -19,7 +19,14 @@
     "dev": "node --watch --env-file-if-exists=.env apps/api/src/main.ts",
     "cli": "node --env-file-if-exists=.env apps/cli/src/main.ts",
     "cli:memory": "PERSISTENCE=memory node --env-file-if-exists=.env apps/cli/src/main.ts",
-    "typecheck": "tsc -p tsconfig.json"
+    "typecheck": "tsc -p tsconfig.json",
+    "test": "node --env-file-if-exists=.env --test '{packages,adapters,apps}/**/src/**/*.unit.test.ts' '{packages,adapters,apps}/**/src/**/*.int.test.ts'",
+    "test:unit": "node --test '{packages,adapters,apps}/**/src/**/*.unit.test.ts'",
+    "test:integration": "node --env-file-if-exists=.env --test '{packages,adapters,apps}/**/src/**/*.int.test.ts'",
+    "test:e2e": "node --env-file-if-exists=.env --test '{packages,adapters,apps}/**/src/**/*.e2e.test.ts'",
+    "test:all": "npm run test:unit && npm run test:integration && npm run test:e2e",
+    "test:coverage": "node --env-file-if-exists=.env --test --experimental-test-coverage --test-coverage-exclude='**/*.test.ts' --test-coverage-exclude='**/testing/**' --test-coverage-exclude='**/node_modules/**' '{packages,adapters,apps}/**/src/**/*.unit.test.ts' '{packages,adapters,apps}/**/src/**/*.int.test.ts'",
+    "test:watch": "node --test --watch '{packages,adapters,apps}/**/src/**/*.unit.test.ts'"
   },
   "devDependencies": {
     "@types/node": "^26.6.4",

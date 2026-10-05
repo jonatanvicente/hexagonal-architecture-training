@@ -7,6 +7,8 @@ database and a notification gateway to show how every kind of port/adapter is bu
 
 - No build step: Node 26 runs `.ts` natively (type stripping). `tsc` is used only to type-check.
 - Runtime dependencies: `fastify`, `pg`, `pino`. Nothing else.
+- Tested with the built-in `node:test` following the test pyramid:
+  **see [README_testing.md](./README_testing.md)**.
 
 ---
 
@@ -129,7 +131,13 @@ npm run typecheck
 npm start                   # REST API on http://127.0.0.1:3000 using PostgreSQL
 npm run start:memory        # same API, in-memory driven adapter – no database needed
 npm run dev                 # node --watch
+
+npm test                    # unit + integration (PostgreSQL tests auto-skip without PGPASSWORD)
+npm run test:all            # unit → integration → end-to-end
 ```
+
+The test strategy, and the reasoning for where each test lives, is explained in
+[README_testing.md](./README_testing.md).
 
 ### REST API (`/api/v1`)
 
@@ -240,9 +248,40 @@ Exit codes: `0` ok, `2` usage/validation error, `3` not found, `1` unexpected fa
   Replacing a simulated adapter (Redis, Kafka) with a real one means rewriting that adapter only.
 - **SQL safety.** All values are bind parameters. Column names that vary (`origin`/`dest`) come
   from a fixed whitelist. `ILIKE` patterns escape `%` and `_`.
+- **Where is the Hexagon?**  The hexagon is two directories:
 
-## 7. Not done yet
+```
+proof_of_concept/
+└─ packages/
+├─ domain/src/          ← the core of the hexagon
+└─ application/src/     ← use cases + ports; its port folders are the hexagon's edge
+```
 
-- Tests (planned next). Hint: every use case can be unit-tested with the in-memory adapters and
-  a fake `ClockPort`, with no mocks framework needed.
+    packages/domain/src/ is the business core. It has no dependencies on anything.
+    - entities/: Airport, Carrier, Flight
+    - value-objects/: IataCode, CarrierCode, Delay, FlightDate
+    - policies/: DelayPolicy, which defines "delayed"
+    - services/: PunctualityReport and the ranking logic
+    - events/: FlightDelayDetected
+    - errors.ts
+
+    packages/application/src/ holds the use cases. It depends only on domain.
+    - services/: the use-case implementations
+    - shared/: input parsing and pagination
+    - views.ts: the read models returned to callers
+    - ports/in/: the use-case interfaces that driving adapters (REST, CLI, Kafka consumer) call
+    - ports/out/: the interfaces that driven adapters (Postgres, cache, Kafka producer, etc.) implement
+
+  - The two ports/ folders are the boundary itself: they're defined inside the hexagon, but they're the only things the outside world touches.
+  - Two kinds of file sit inside those folders without being part of the hexagon:
+      - packages/application/src/testing/ is test support. It's exposed as a separate @usflights/application/testing entry point and never imported by production code.
+        - *.test.ts files sit next to the code they test.
+
+## 7. Testing
+
+217 tests organised as a test pyramid (unit → integration/contract → end-to-end), co-located
+with the code they test. Full explanation: **[README_testing.md](./README_testing.md)**.
+
+## 8. Not done yet
+
 - Architecture fitness checks (e.g. dependency-cruiser) to fail CI when a boundary is crossed.

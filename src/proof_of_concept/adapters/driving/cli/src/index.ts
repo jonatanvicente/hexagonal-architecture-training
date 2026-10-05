@@ -46,26 +46,15 @@ Commands:
 type Row = Record<string, unknown>;
 
 export async function runCli(argv: string[], ports: CliDrivingPorts, io: CliIo): Promise<number> {
-  const { values, positionals } = parseArgs({
-    args: argv,
-    allowPositionals: true,
-    strict: true,
-    options: {
-      state: { type: 'string' },
-      city: { type: 'string' },
-      q: { type: 'string' },
-      origin: { type: 'string' },
-      dest: { type: 'string' },
-      carrier: { type: 'string' },
-      year: { type: 'string' },
-      min: { type: 'string' },
-      'min-flights': { type: 'string' },
-      limit: { type: 'string' },
-      offset: { type: 'string' },
-      json: { type: 'boolean', default: false },
-      help: { type: 'boolean', short: 'h', default: false },
-    },
-  });
+  let parsed: ParsedArgs;
+  try {
+    parsed = parseCliArgs(argv);
+  } catch (error) {
+    // Unknown flags or missing option values are usage errors, not crashes.
+    io.err(`${error instanceof Error ? error.message : String(error)}\n\n${USAGE}`);
+    return EXIT_USAGE;
+  }
+  const { values, positionals } = parsed;
 
   const [command, argument] = positionals;
   if (!command || values.help) {
@@ -181,6 +170,31 @@ export async function runCli(argv: string[], ports: CliDrivingPorts, io: CliIo):
 }
 
 class CliUsageError extends Error {}
+
+function parseCliArgs(argv: string[]) {
+  return parseArgs({
+    args: argv,
+    allowPositionals: true,
+    strict: true,
+    options: {
+      state: { type: 'string' },
+      city: { type: 'string' },
+      q: { type: 'string' },
+      origin: { type: 'string' },
+      dest: { type: 'string' },
+      carrier: { type: 'string' },
+      year: { type: 'string' },
+      min: { type: 'string' },
+      'min-flights': { type: 'string' },
+      limit: { type: 'string' },
+      offset: { type: 'string' },
+      json: { type: 'boolean', default: false },
+      help: { type: 'boolean', short: 'h', default: false },
+    },
+  });
+}
+
+type ParsedArgs = ReturnType<typeof parseCliArgs>;
 
 function requireArg(value: string | undefined, name: string): string {
   if (!value) throw new CliUsageError(`Missing argument <${name}>`);

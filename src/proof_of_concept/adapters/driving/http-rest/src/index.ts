@@ -11,14 +11,17 @@ export const API_PREFIX = '/api/v1';
 export type HttpDrivingPorts = AirportRoutesDeps & FlightRoutesDeps & CarrierRoutesDeps;
 
 export interface HttpServerOptions {
-  readonly logger: FastifyBaseLogger;
+  /** Omit to disable request logging (e.g. in adapter tests). */
+  readonly logger?: FastifyBaseLogger;
 }
 
 export function buildHttpServer(
   ports: HttpDrivingPorts,
-  options: HttpServerOptions,
+  options: HttpServerOptions = {},
 ): FastifyInstance {
-  const app = Fastify({ loggerInstance: options.logger });
+  const app = options.logger
+    ? Fastify({ loggerInstance: options.logger })
+    : Fastify({ logger: false });
 
   registerErrorHandling(app);
 
