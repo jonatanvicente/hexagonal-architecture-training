@@ -253,8 +253,8 @@ Exit codes: `0` ok, `2` usage/validation error, `3` not found, `1` unexpected fa
 ```
 proof_of_concept/
 └─ packages/
-├─ domain/src/          ← the core of the hexagon
-└─ application/src/     ← use cases + ports; its port folders are the hexagon's edge
+     ├─ domain/src/          ← the core of the hexagon
+     └─ application/src/     ← use cases + ports; its port folders are the hexagon's edge
 ```
 
     packages/domain/src/ is the business core. It has no dependencies on anything.
