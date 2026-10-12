@@ -1,0 +1,20 @@
+{
+  "name": "library-hexagon-v1",
+  "version": "1.0.0",
+  "description": "Library Loans - starter code for Lab 2 (Hexagonal Architecture course)",
+  "private": true,
+  "scripts": {
+    "start": "tsx src/main.ts",
+    "test": "node --import tsx --test \"test/**/*.test.ts\"",
+    "typecheck": "tsc --noEmit",
+    "check:arch": "! grep -rn \"adapters\" src/core/ && ! grep -rn \"application\\\\|ports\" src/core/domain/"
+  },
+  "engines": {
+    "node": ">=22"
+  },
+  "devDependencies": {
+    "@types/node": "^22.10.0",
+    "tsx": "^4.19.0",
+    "typescript": "^5.6.0"
+  }
+}
